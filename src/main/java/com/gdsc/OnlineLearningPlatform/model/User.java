@@ -47,10 +47,7 @@ public class User {
     )
     private String password;
 
-    @Column(
-            name = "phone",
-            nullable = false
-    )
+    @Column
     private String phone;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

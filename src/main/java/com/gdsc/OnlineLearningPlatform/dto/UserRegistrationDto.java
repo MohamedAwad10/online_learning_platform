@@ -30,9 +30,9 @@ public class UserRegistrationDto {
     , message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
     private String password;
 
-    @NotNull
-    @NotBlank
     private String phone;
 
-    private Set<String> roles;
+    @NotNull(message = "Roles are required")
+    @NotEmpty
+    private Set<@NotBlank(message = "Role cannot be blank") String> roles;
 }

@@ -7,6 +7,9 @@ import com.gdsc.OnlineLearningPlatform.model.User;
 import com.gdsc.OnlineLearningPlatform.repository.RoleRepository;
 import com.gdsc.OnlineLearningPlatform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,14 +61,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public String loginUser(UserLoginDto userLoginDto) throws Exception{
+    public ResponseEntity<String> loginUser(UserLoginDto userLoginDto) throws Exception{
 
-        if(userRepository.findByEmail(userLoginDto.getEmail()).isPresent()){
-            Optional<User> userLogin = userRepository.findByEmail(userLoginDto.getEmail())
-                    .filter(user -> passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword()));
-            if(userLogin.isPresent())
-                return "Logged in Successfully";
-            return "Password is wrong";
+        Optional<User> userLogin = userRepository.findByEmail(userLoginDto.getEmail());
+        if(userLogin.isPresent()){
+            User user = userLogin.get();
+            if(passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword()))
+                return ResponseEntity.ok("Logged in Successfully");
+            else
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password is wrong");
         } else {
             throw new IllegalArgumentException("This Email is not found, Please register first.");
         }

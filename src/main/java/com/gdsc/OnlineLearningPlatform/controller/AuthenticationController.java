@@ -34,10 +34,11 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto){
+        System.out.println(userLoginDto.getEmail());
         try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.loginUser(userLoginDto));
+            return userService.loginUser(userLoginDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
