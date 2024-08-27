@@ -1,5 +1,6 @@
 package com.gdsc.OnlineLearningPlatform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,6 +60,7 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private CourseCategory category;
 
     @OneToMany(mappedBy = "course")
