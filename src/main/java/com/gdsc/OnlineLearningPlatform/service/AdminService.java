@@ -1,10 +1,8 @@
 package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.AdminDto;
-import com.gdsc.OnlineLearningPlatform.model.Role;
-import com.gdsc.OnlineLearningPlatform.model.User;
-import com.gdsc.OnlineLearningPlatform.repository.RoleRepository;
-import com.gdsc.OnlineLearningPlatform.repository.UserRepository;
+import com.gdsc.OnlineLearningPlatform.model.*;
+import com.gdsc.OnlineLearningPlatform.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,24 +13,16 @@ import java.util.Set;
 @Service
 public class AdminService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     public AdminService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
-//    public void checkUserAndRoles(Long userId, AdminDto adminDto){
-//
-//    }
-
     public ResponseEntity<String> addRoleToUser(Long userId, AdminDto adminDto) {
-
-        if(adminDto.getRolesNames() == null || adminDto.getRolesNames().isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No roles provided to add");
-        }
 
         Optional<User> optionalUser =  userRepository.findById(userId);
         if(optionalUser.isEmpty()){
@@ -58,14 +48,11 @@ public class AdminService {
 
         user.setRoles(userRoles);
         userRepository.save(user);
+
         return ResponseEntity.ok("Roles added to user successfully");
     }
 
     public ResponseEntity<String> removeRoleFromUser(Long userId, AdminDto adminDto) {
-
-        if(adminDto.getRolesNames() == null || adminDto.getRolesNames().isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No roles provided to remove");
-        }
 
         Optional<User> optionalUser =  userRepository.findById(userId);
         if(optionalUser.isEmpty()){

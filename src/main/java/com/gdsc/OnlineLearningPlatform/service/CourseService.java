@@ -37,7 +37,9 @@ public class CourseService {
             course.setTitle(courseDto.getTitle());
             course.setCategory(category);
             course.setDescription(courseDto.getDescription());
-            course.setTags(String.join(",", courseDto.getTags()));
+            if(courseDto.getTags() != null){
+                course.setTags(String.join(",", courseDto.getTags()));
+            }
 
             return ResponseEntity.status(HttpStatus.CREATED).body(courseRepository.save(course));
         } else {

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Setter
@@ -35,4 +36,10 @@ public class UserRegistrationDto {
     @NotNull(message = "Roles are required")
     @NotEmpty
     private Set<@NotBlank(message = "Role cannot be blank") String> roles;
+
+    private String birthDate;
+
+    private String bio;
+
+    private Integer yearsOfExperience;
 }

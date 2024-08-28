@@ -3,8 +3,12 @@ package com.gdsc.OnlineLearningPlatform.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -21,11 +25,14 @@ public class Review {
     private Integer rating;
     private String comment;
 
+    @CreationTimestamp
+    private LocalDate createdAt;
+
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+//    @ManyToOne
+//    @JoinColumn(name = "course_id")
+//    private Course course;
 }

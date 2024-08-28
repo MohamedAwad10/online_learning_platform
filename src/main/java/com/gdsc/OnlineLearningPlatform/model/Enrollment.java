@@ -17,7 +17,7 @@ public class Enrollment {
     private Long id;
 
     @Column(nullable = false)
-    private Boolean completed;
+    private Boolean completed = false;
 
     @CreationTimestamp
     @Column(nullable = false)

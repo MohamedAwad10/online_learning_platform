@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Setter
@@ -25,10 +24,5 @@ public class CourseDto {
     private String category;
 
     private Set<String> tags;
-
-//    @NotNull
-//    @NotBlank
-//    private LocalDate createdAt;
-
 
 }

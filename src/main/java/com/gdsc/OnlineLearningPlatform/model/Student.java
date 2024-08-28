@@ -12,7 +12,6 @@ import java.util.Set;
 @Entity
 public class Student extends User{
 
-    @Column(nullable = false)
     private LocalDate birthDate;
 
     @ManyToMany

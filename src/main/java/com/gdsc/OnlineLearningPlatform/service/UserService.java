@@ -2,7 +2,9 @@ package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.UserLoginDto;
 import com.gdsc.OnlineLearningPlatform.dto.UserRegistrationDto;
+import com.gdsc.OnlineLearningPlatform.model.Instructor;
 import com.gdsc.OnlineLearningPlatform.model.Role;
+import com.gdsc.OnlineLearningPlatform.model.Student;
 import com.gdsc.OnlineLearningPlatform.model.User;
 import com.gdsc.OnlineLearningPlatform.repository.RoleRepository;
 import com.gdsc.OnlineLearningPlatform.repository.UserRepository;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -40,14 +44,25 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         for(String roleName: userRegistration.getRoles()){
             Optional<Role> role = roleRepository.findByName(roleName.toUpperCase());
-            if(role.isPresent()){
+            if(role.isPresent() && !roleName.equalsIgnoreCase("admin")){
                 roles.add(role.get());
             } else {
                 throw new IllegalArgumentException("Role not found: "+roleName);
             }
         }
 
-        User user = new User();
+        User user;
+        if(roles.stream().anyMatch(role -> role.getName().equalsIgnoreCase("INSTRUCTOR"))){
+            user = new Instructor();
+            ((Instructor) user).setBio(userRegistration.getBio());
+            ((Instructor) user).setYearsOfExperience(userRegistration.getYearsOfExperience());
+        } else if(roles.stream().anyMatch(role -> role.getName().equalsIgnoreCase("STUDENT"))){
+            user = new Student();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+            ((Student) user).setBirthDate(LocalDate.parse(userRegistration.getBirthDate(), formatter));
+        } else {
+            user = new User();
+        }
         user.setFirstName(userRegistration.getFirstName());
         user.setLastName(userRegistration.getLastName());
         user.setEmail(userRegistration.getEmail());
