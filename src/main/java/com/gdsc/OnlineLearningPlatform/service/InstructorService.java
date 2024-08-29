@@ -85,4 +85,63 @@ public class InstructorService {
         courseRepository.save(course);
         return ResponseEntity.status(HttpStatus.CREATED).body(courseRepository.save(course));
     }
+
+    public ResponseEntity<?> updateCourse(Long instructorId, Long courseId, CourseDto courseDto) {
+
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
+        }
+
+        Instructor instructor = optionalInstructor.get();
+
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+
+        if(optionalCourse.stream().noneMatch(course -> course.getInstructor().equals(instructor))){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Instructor is not the owner of this Course");
+        }
+
+        Course course = optionalCourse.get();
+        CourseCategory category = categoryRepository.findByName(courseDto.getCategory())
+                .orElseGet(() -> {
+                    CourseCategory newCategory = new CourseCategory();
+                    newCategory.setName(courseDto.getCategory());
+                    return categoryRepository.save(newCategory);
+                });
+        course.setTitle(courseDto.getTitle());
+        course.setDescription(courseDto.getDescription());
+        course.setCategory(category);
+        if(courseDto.getTags() != null){
+            course.setTags(String.join(",", courseDto.getTags()));
+        }
+
+        courseRepository.save(course);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(courseRepository.save(course));
+    }
+
+    public ResponseEntity<String> deleteCourse(Long instructorId, Long courseId) {
+
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
+        }
+
+        Instructor instructor = optionalInstructor.get();
+
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+
+        if(optionalCourse.stream().noneMatch(course -> course.getInstructor().equals(instructor))){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Instructor is not the owner of this Course");
+        }
+
+        Course course = optionalCourse.get();
+        courseRepository.delete(course);
+        return ResponseEntity.ok().body("Course deleted successfully");
+    }
 }

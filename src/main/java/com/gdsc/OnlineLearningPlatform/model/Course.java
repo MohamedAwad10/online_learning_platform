@@ -53,7 +53,7 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Enrollment> enrollments;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Review> reviews;
 
     @OneToMany(mappedBy = "course")

@@ -1,5 +1,6 @@
 package com.gdsc.OnlineLearningPlatform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,9 +31,11 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @JsonIgnore
     private Student student;
 
-//    @ManyToOne
-//    @JoinColumn(name = "course_id")
-//    private Course course;
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    @JsonIgnore
+    private Course course;
 }

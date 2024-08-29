@@ -80,11 +80,13 @@ public class StudentService {
         }
 
         Student student = optionalStudent.get();
+        Course course = optionalCourse.get();
 
         Review review = new Review();
         review.setRating(reviewDto.getRating());
         review.setComment(reviewDto.getComment());
         review.setStudent(student);
+        review.setCourse(course);
 
         reviewRepository.save(review);
         return ResponseEntity.ok("Review submitted successfully");
