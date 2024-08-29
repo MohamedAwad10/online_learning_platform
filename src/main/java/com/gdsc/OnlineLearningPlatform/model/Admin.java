@@ -12,6 +12,6 @@ import java.util.Set;
 @Entity
 public class Admin extends User{
 
-    @OneToMany(mappedBy = "admin")
+    @OneToMany
     private Set<CourseSubmission> courseSubmissions;
 }

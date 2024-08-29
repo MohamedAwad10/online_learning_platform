@@ -1,10 +1,13 @@
 package com.gdsc.OnlineLearningPlatform.controller;
 
 import com.gdsc.OnlineLearningPlatform.dto.AdminDto;
+import com.gdsc.OnlineLearningPlatform.model.CourseSubmission;
 import com.gdsc.OnlineLearningPlatform.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -24,5 +27,20 @@ public class AdminController {
     @PutMapping("/removeRole/{userId}")
     public ResponseEntity<String> removeRoleFromUser(@PathVariable Long userId, @Valid @RequestBody AdminDto adminDto){
         return adminService.removeRoleFromUser(userId, adminDto);
+    }
+
+    @GetMapping("/submissions")
+    public ResponseEntity<List<CourseSubmission>> getAllSubmissions(){
+        return adminService.getAllSubmissions();
+    }
+
+    @PutMapping("/approve/{submissionId}")
+    public ResponseEntity<String> approveCourse(@PathVariable Long submissionId){
+        return adminService.approveCourse(submissionId);
+    }
+
+    @PutMapping("/reject/{submissionId}")
+    public ResponseEntity<String> rejectCourse(@PathVariable Long submissionId){
+        return adminService.rejectCourse(submissionId);
     }
 }

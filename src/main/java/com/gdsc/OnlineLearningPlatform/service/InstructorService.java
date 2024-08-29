@@ -1,11 +1,14 @@
 package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
+import com.gdsc.OnlineLearningPlatform.enums.CourseStatus;
 import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.model.CourseCategory;
+import com.gdsc.OnlineLearningPlatform.model.CourseSubmission;
 import com.gdsc.OnlineLearningPlatform.model.Instructor;
 import com.gdsc.OnlineLearningPlatform.repository.CategoryRepository;
 import com.gdsc.OnlineLearningPlatform.repository.CourseRepository;
+import com.gdsc.OnlineLearningPlatform.repository.CourseSubmissionRepository;
 import com.gdsc.OnlineLearningPlatform.repository.InstructorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +26,16 @@ public class InstructorService {
 
     private final CourseRepository courseRepository;
 
+    private final CourseSubmissionRepository courseSubmissionRepository;
+
     public InstructorService(InstructorRepository instructorRepository,
-                             CategoryRepository categoryRepository, CourseRepository courseRepository) {
+                             CategoryRepository categoryRepository, CourseRepository courseRepository
+                                , CourseSubmissionRepository courseSubmissionRepository) {
         this.instructorRepository = instructorRepository;
         this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
+        this.courseSubmissionRepository = courseSubmissionRepository;
     }
-
-//    public ResponseEntity<String> checkInstructorExist(Long instructorId){
-//        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
-//        if(optionalInstructor.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
-//        }
-//        return ResponseEntity.ok("Founded");
-//    }
 
     public ResponseEntity<?> myAllCourses(Long instructorId) {
 
@@ -54,7 +53,7 @@ public class InstructorService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No courses found for instructor");
     }
 
-    public ResponseEntity<?> createCourse(Long instructorId, CourseDto courseDto) {
+    public ResponseEntity<?> submitCourseForApproval(Long instructorId, CourseDto courseDto) {
 
         Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
         if(optionalInstructor.isEmpty()){
@@ -67,23 +66,24 @@ public class InstructorService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Course already exists with this title");
         }
 
-        Course course = new Course();
+        CourseSubmission courseSubmission = new CourseSubmission();
         CourseCategory category = categoryRepository.findByName(courseDto.getCategory())
                 .orElseGet(() -> {
                     CourseCategory newCategory = new CourseCategory();
                     newCategory.setName(courseDto.getCategory());
                     return categoryRepository.save(newCategory);
                 });
-        course.setTitle(courseDto.getTitle());
-        course.setDescription(courseDto.getDescription());
-        course.setCategory(category);
-        course.setInstructor(instructor);
+        courseSubmission.setTitle(courseDto.getTitle());
+        courseSubmission.setDescription(courseDto.getDescription());
+        courseSubmission.setCategory(category);
+        courseSubmission.setInstructor(instructor);
         if(courseDto.getTags() != null){
-            course.setTags(String.join(",", courseDto.getTags()));
+            courseSubmission.setTags(String.join(",", courseDto.getTags()));
         }
+        courseSubmission.setStatus(CourseStatus.PENDING);
 
-        courseRepository.save(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body(courseRepository.save(course));
+        courseSubmissionRepository.save(courseSubmission);
+        return ResponseEntity.ok("Course submitted for approval");
     }
 
     public ResponseEntity<?> updateCourse(Long instructorId, Long courseId, CourseDto courseDto) {

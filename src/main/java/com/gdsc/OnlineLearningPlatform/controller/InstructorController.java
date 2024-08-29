@@ -23,7 +23,7 @@ public class InstructorController {
 
     @PostMapping("/{instructorId}/course")
     public ResponseEntity<?> createCourse(@PathVariable Long instructorId, @RequestBody CourseDto courseDto){
-        return instructorService.createCourse(instructorId, courseDto);
+        return instructorService.submitCourseForApproval(instructorId, courseDto);
     }
 
     @PutMapping("/{instructorId}/course/{courseId}")
