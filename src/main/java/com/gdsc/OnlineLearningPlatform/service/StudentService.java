@@ -82,6 +82,10 @@ public class StudentService {
         Student student = optionalStudent.get();
         Course course = optionalCourse.get();
 
+        if(student.getReviews().stream().anyMatch(review -> review.getCourse().equals(course))){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Student already reviewed this course");
+        }
+
         Review review = new Review();
         review.setRating(reviewDto.getRating());
         review.setComment(reviewDto.getComment());
