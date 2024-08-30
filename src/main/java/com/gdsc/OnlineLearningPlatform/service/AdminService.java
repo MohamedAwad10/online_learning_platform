@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -22,8 +21,6 @@ public class AdminService {
 
     private final CourseSubmissionRepository courseSubmissionRepository;
 
-    private final CategoryRepository categoryRepository;
-
     private final CourseRepository courseRepository;
 
     public AdminService(UserRepository userRepository, RoleRepository roleRepository
@@ -32,7 +29,6 @@ public class AdminService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.courseSubmissionRepository = courseSubmissionRepository;
-        this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
     }
 

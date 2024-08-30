@@ -78,7 +78,7 @@ public class InstructorService {
         courseSubmission.setCategory(category);
         courseSubmission.setInstructor(instructor);
         if(courseDto.getTags() != null){
-            courseSubmission.setTags(String.join(",", courseDto.getTags()));
+            courseSubmission.setTags(String.join(", ", courseDto.getTags()));
         }
         courseSubmission.setStatus(CourseStatus.PENDING);
 
@@ -118,7 +118,7 @@ public class InstructorService {
         course.setDescription(courseDto.getDescription());
         course.setCategory(category);
         if(courseDto.getTags() != null){
-            course.setTags(String.join(",", courseDto.getTags()));
+            course.setTags(String.join(", ", courseDto.getTags()));
         }
 
         courseRepository.save(course);

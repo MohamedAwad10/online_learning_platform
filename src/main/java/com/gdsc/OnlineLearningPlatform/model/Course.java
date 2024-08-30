@@ -56,9 +56,6 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Review> reviews;
 
-    @OneToMany(mappedBy = "course")
-    private Set<Notification> notifications;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnore
