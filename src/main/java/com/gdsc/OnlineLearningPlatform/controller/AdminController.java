@@ -1,7 +1,9 @@
 package com.gdsc.OnlineLearningPlatform.controller;
 
 import com.gdsc.OnlineLearningPlatform.dto.AdminDto;
+import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.model.CourseSubmission;
+import com.gdsc.OnlineLearningPlatform.model.User;
 import com.gdsc.OnlineLearningPlatform.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,26 @@ public class AdminController {
         return adminService.getAllSubmissions();
     }
 
+    @GetMapping("/courses")
+    public ResponseEntity<?> getAllCourses(){
+        return adminService.getAllCourses();
+    }
+
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<?> getCourseById(@PathVariable Long courseId){
+        return adminService.getCourseById(courseId);
+    }
+
+    @GetMapping("/course/{title}")
+    public ResponseEntity<?> getCourseByTitle(@PathVariable String title){
+        return adminService.getCourseByTitle(title);
+    }
+
+    @DeleteMapping("/course/{courseId}")
+    public ResponseEntity<String> deleteCourseById(@PathVariable Long courseId){
+        return adminService.deleteCourseById(courseId);
+    }
+
     @PutMapping("/approve/{submissionId}")
     public ResponseEntity<String> approveCourse(@PathVariable Long submissionId){
         return adminService.approveCourse(submissionId);
@@ -42,5 +64,20 @@ public class AdminController {
     @PutMapping("/reject/{submissionId}")
     public ResponseEntity<String> rejectCourse(@PathVariable Long submissionId){
         return adminService.rejectCourse(submissionId);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(){
+        return adminService.getAllUsers();
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId){
+        return adminService.getUserById(userId);
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<String> deleteUserById(@PathVariable Long userId){
+        return adminService.deleteUserById(userId);
     }
 }

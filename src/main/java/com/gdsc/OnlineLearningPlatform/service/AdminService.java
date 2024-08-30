@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -155,5 +156,73 @@ public class AdminService {
 
     public ResponseEntity<List<CourseSubmission>> getAllSubmissions() {
         return ResponseEntity.ok().body(courseSubmissionRepository.findAll());
+    }
+
+    public ResponseEntity<?> getAllCourses() {
+        List<Course> courses = courseRepository.findAll();
+        if(courses.isEmpty()){
+            return ResponseEntity.ok().body("There are no courses");
+        }
+        return ResponseEntity.ok().body(courses);
+    }
+
+    public ResponseEntity<?> getCourseById(Long courseId) {
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+        Course course = optionalCourse.get();
+
+        return ResponseEntity.ok(course);
+    }
+
+    public ResponseEntity<?> getCourseByTitle(String title) {
+        Optional<Course> optionalCourse = courseRepository.findByTitle(title);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+        Course course = optionalCourse.get();
+
+        return ResponseEntity.ok(course);
+    }
+
+    public ResponseEntity<String> deleteCourseById(Long courseId) {
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+        Course course = optionalCourse.get();
+
+        courseRepository.delete(course);
+        return ResponseEntity.ok("Course deleted Successfully");
+    }
+
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        if(users.isEmpty()){
+            return ResponseEntity.ok().body("There are no users.");
+        }
+        return ResponseEntity.ok().body(users);
+    }
+
+    public ResponseEntity<?> getUserById(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        User user = optionalUser.get();
+
+        return ResponseEntity.ok().body(user);
+    }
+
+    public ResponseEntity<String> deleteUserById(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        User user = optionalUser.get();
+
+        userRepository.delete(user);
+        return ResponseEntity.ok("User deleted Successfully");
     }
 }
