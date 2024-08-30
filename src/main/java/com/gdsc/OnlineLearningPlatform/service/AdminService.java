@@ -113,7 +113,6 @@ public class AdminService {
         }
 
         courseSubmission.setStatus(CourseStatus.APPROVED);
-        courseSubmissionRepository.save(courseSubmission);
 
         Course course = new Course();
         course.setTitle(courseSubmission.getTitle());
@@ -121,8 +120,11 @@ public class AdminService {
         course.setInstructor(courseSubmission.getInstructor());
         course.setCategory(courseSubmission.getCategory());
         course.setTags(courseSubmission.getTags());
+        courseSubmission.setCourse(course);
 
-        courseRepository.save(course);
+        courseSubmissionRepository.save(courseSubmission);
+
+//        courseRepository.save(course);
         return ResponseEntity.ok("Course submission approved and course created successfully");
     }
 
@@ -144,7 +146,8 @@ public class AdminService {
         }
 
         courseSubmission.setStatus(CourseStatus.REJECTED);
-        courseSubmission.setFeedback("");
+        courseSubmission.setFeedback("Your Course "+courseSubmission.getTitle()+" has been rejected.");
+        courseSubmission.setTitle("Rejected "+courseSubmission.getTitle());
         courseSubmissionRepository.save(courseSubmission);
 
         return ResponseEntity.ok("Course submission rejected");

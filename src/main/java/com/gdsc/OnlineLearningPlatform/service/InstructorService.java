@@ -82,6 +82,9 @@ public class InstructorService {
         }
         courseSubmission.setStatus(CourseStatus.PENDING);
 
+        if(courseSubmissionRepository.findByTitle(courseSubmission.getTitle()).isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Course already submitted for approval");
+        }
         courseSubmissionRepository.save(courseSubmission);
         return ResponseEntity.ok("Course submitted for approval");
     }
