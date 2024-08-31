@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StudentService {
@@ -40,6 +41,27 @@ public class StudentService {
         return ResponseEntity.ok().body(courses);
     }
 
+    public ResponseEntity<?> getMyCourses(Long studId) {
+        Optional<Student> optionalStudent = studentRepository.findById(studId);
+        if(optionalStudent.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found");
+        }
+
+        Student student = optionalStudent.get();
+        Set<Course> studentCourses =  student.getCourses();
+        return ResponseEntity.ok(studentCourses);
+    }
+
+    public ResponseEntity<?> getCourse(Long courseId) {
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+
+        Course course = optionalCourse.get();
+        return ResponseEntity.ok().body(course);
+    }
+
     public ResponseEntity<String> enrollInCourse(Long studId, Long courseId) {
 
         Optional<Student> optionalStudent = studentRepository.findById(studId);
@@ -62,6 +84,9 @@ public class StudentService {
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourse(course);
+
+        student.getCourses().add(course);
+        course.getStudents().add(student);
 
         enrollmentRepository.save(enrollment);
         return ResponseEntity.ok().body("Student enrolled in course successfully");

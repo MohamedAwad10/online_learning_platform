@@ -43,6 +43,7 @@ public class Course {
     private LocalDate updatedAt;
 
     @ManyToMany(mappedBy = "courses")
+    @JsonIgnore
     private Set<Student> students;
 
     @ManyToOne

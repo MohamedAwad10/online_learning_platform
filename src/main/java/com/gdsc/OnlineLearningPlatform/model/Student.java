@@ -14,7 +14,7 @@ public class Student extends User{
 
     private LocalDate birthDate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "student_course",
             joinColumns = @JoinColumn(name = "student_id"),
