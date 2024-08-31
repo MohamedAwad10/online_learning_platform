@@ -24,8 +24,7 @@ public class AdminService {
     private final CourseRepository courseRepository;
 
     public AdminService(UserRepository userRepository, RoleRepository roleRepository
-                        , CourseSubmissionRepository courseSubmissionRepository
-                        , CategoryRepository categoryRepository, CourseRepository courseRepository) {
+                        , CourseSubmissionRepository courseSubmissionRepository, CourseRepository courseRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.courseSubmissionRepository = courseSubmissionRepository;
@@ -61,8 +60,6 @@ public class AdminService {
 
         return ResponseEntity.ok("Roles added to user successfully");
     }
-
-
 
     public ResponseEntity<String> removeRoleFromUser(Long userId, AdminDto adminDto) {
 
@@ -124,7 +121,6 @@ public class AdminService {
 //        courseRepository.save(course);
         return ResponseEntity.ok("Course submission approved and course created successfully");
     }
-
 
     public ResponseEntity<String> rejectCourse(Long submissionId) {
 
