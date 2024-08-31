@@ -13,7 +13,7 @@ public class ReviewDto {
     @NotNull
     @Min(value = 1, message = "Minimum value should be 1")
     @Max(value = 5, message = "Maximum value should be 5")
-    private Integer rating;
+    private Double rating;
 
     private String comment;
 }

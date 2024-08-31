@@ -23,7 +23,7 @@ public class Review {
     @Min(1)
     @Max(5)
     @Column(nullable = false)
-    private Integer rating;
+    private Double rating;
     private String comment;
 
     @CreationTimestamp
