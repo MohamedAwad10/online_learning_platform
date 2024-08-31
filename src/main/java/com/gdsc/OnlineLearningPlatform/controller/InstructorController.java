@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/instructor")
+@RequestMapping("/online-learning/instructor")
 public class InstructorController {
 
     private final InstructorService instructorService;
@@ -19,6 +19,11 @@ public class InstructorController {
     @GetMapping("/{instructorId}/courses")
     public ResponseEntity<?> myAllCourses(@PathVariable Long instructorId){
         return instructorService.myAllCourses(instructorId);
+    }
+
+    @GetMapping("/{instructorId}/course/{courseId}")
+    public ResponseEntity<?> getCourse(@PathVariable Long instructorId, @PathVariable Long courseId){
+        return instructorService.getCourse(instructorId, courseId);
     }
 
     @PostMapping("/{instructorId}/course")

@@ -50,7 +50,28 @@ public class InstructorService {
             Set<Course> courses = myCourses.get();
             return ResponseEntity.ok(courses);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No courses found for instructor");
+        return ResponseEntity.ok().body("There are no courses for instructor");
+    }
+
+    public ResponseEntity<?> getCourse(Long instructorId, Long courseId) {
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
+        }
+
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+
+        Instructor instructor = optionalInstructor.get();
+        Course myCourse = optionalCourse.get();
+
+        if(instructor.getCourses().stream().noneMatch(course -> course.equals(myCourse))){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Instructor does not have this course");
+        }
+
+        return ResponseEntity.ok().body(myCourse);
     }
 
     public ResponseEntity<?> submitCourseForApproval(Long instructorId, CourseDto courseDto) {
