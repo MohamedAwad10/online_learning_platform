@@ -2,10 +2,7 @@ package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
 import com.gdsc.OnlineLearningPlatform.enums.CourseStatus;
-import com.gdsc.OnlineLearningPlatform.model.Course;
-import com.gdsc.OnlineLearningPlatform.model.CourseCategory;
-import com.gdsc.OnlineLearningPlatform.model.CourseSubmission;
-import com.gdsc.OnlineLearningPlatform.model.Instructor;
+import com.gdsc.OnlineLearningPlatform.model.*;
 import com.gdsc.OnlineLearningPlatform.repository.CategoryRepository;
 import com.gdsc.OnlineLearningPlatform.repository.CourseRepository;
 import com.gdsc.OnlineLearningPlatform.repository.CourseSubmissionRepository;
@@ -72,6 +69,29 @@ public class InstructorService {
         }
 
         return ResponseEntity.ok().body(myCourse);
+    }
+
+    public ResponseEntity<?> getAllEnrollments(Long instructorId, Long courseId) {
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
+        }
+
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }
+
+        Instructor instructor = optionalInstructor.get();
+        Course myCourse = optionalCourse.get();
+        if(instructor.getCourses().stream().anyMatch(course -> course.equals(myCourse))){
+            Set<Enrollment> enrollments = myCourse.getEnrollments();
+            if(enrollments.isEmpty()){
+                return ResponseEntity.ok("there are no Enrollments");
+            }
+            return ResponseEntity.ok(enrollments);
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Instructor not the owner of "+myCourse.getTitle());
     }
 
     public ResponseEntity<?> submitCourseForApproval(Long instructorId, CourseDto courseDto) {

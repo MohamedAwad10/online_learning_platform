@@ -26,6 +26,11 @@ public class InstructorController {
         return instructorService.getCourse(instructorId, courseId);
     }
 
+    @GetMapping("/{instructorId}/{courseId}/enrollments")
+    public ResponseEntity<?> getAllEnrollments(@PathVariable Long instructorId, @PathVariable Long courseId){
+        return instructorService.getAllEnrollments(instructorId, courseId);
+    }
+
     @PostMapping("/{instructorId}/course")
     public ResponseEntity<?> createCourse(@PathVariable Long instructorId, @RequestBody CourseDto courseDto){
         return instructorService.submitCourseForApproval(instructorId, courseDto);
