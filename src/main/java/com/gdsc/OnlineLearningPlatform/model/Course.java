@@ -48,7 +48,6 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
-    @JsonIgnore
     private Instructor instructor;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -59,10 +58,6 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private CourseCategory category;
-
-    @OneToMany(mappedBy = "course")
-    private Set<CourseSubmission> courseSubmissions;
 
 }
