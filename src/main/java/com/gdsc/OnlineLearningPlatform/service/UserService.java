@@ -76,7 +76,7 @@ public class UserService {
         return ResponseEntity.ok("Successful register");
     }
 
-    public ResponseEntity<String> loginUser(UserLoginDto userLoginDto) throws Exception{
+    public ResponseEntity<String> loginUser(UserLoginDto userLoginDto){
 
         Optional<User> userLogin = userRepository.findByEmail(userLoginDto.getEmail());
         if(userLogin.isPresent()){
@@ -86,7 +86,7 @@ public class UserService {
             else
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password is wrong");
         } else {
-            throw new IllegalArgumentException("This Email is not found, Please register first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This Email is not found, Please register first.");
         }
     }
 }

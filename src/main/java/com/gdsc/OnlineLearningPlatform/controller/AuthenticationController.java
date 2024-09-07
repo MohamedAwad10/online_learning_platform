@@ -29,11 +29,6 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto){
-        System.out.println(userLoginDto.getEmail());
-        try {
-            return userService.loginUser(userLoginDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        return userService.loginUser(userLoginDto);
     }
 }
