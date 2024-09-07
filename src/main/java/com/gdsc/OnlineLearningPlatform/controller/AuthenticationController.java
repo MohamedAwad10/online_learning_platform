@@ -23,13 +23,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto userRegistration){
-        try {
-            User registerdUser = userService.registerUser(userRegistration);
-            return ResponseEntity.status(HttpStatus.CREATED).body(registerdUser);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegistrationDto userRegistration){
+        return userService.registerUser(userRegistration);
     }
 
     @PostMapping("/login")

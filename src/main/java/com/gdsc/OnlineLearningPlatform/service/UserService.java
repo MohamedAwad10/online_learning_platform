@@ -35,10 +35,10 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public User registerUser(UserRegistrationDto userRegistration) throws Exception{
+    public ResponseEntity<String> registerUser(UserRegistrationDto userRegistration){
 
         if(userRepository.findByEmail(userRegistration.getEmail()).isPresent()){
-            throw new IllegalArgumentException("Email already in use");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
         }
 
         Set<Role> roles = new HashSet<>();
@@ -47,7 +47,7 @@ public class UserService {
             if(role.isPresent() && !roleName.equalsIgnoreCase("admin")){
                 roles.add(role.get());
             } else {
-                throw new IllegalArgumentException("Role not found: "+roleName);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role not found: "+roleName);
             }
         }
 
@@ -71,7 +71,9 @@ public class UserService {
         user.setPhone(userRegistration.getPhone());
         user.setRoles(roles);
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Successful register");
     }
 
     public ResponseEntity<String> loginUser(UserLoginDto userLoginDto) throws Exception{
