@@ -21,6 +21,5 @@ public class CourseCategory {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    @JsonIgnore
     private Set<Course> courses;
 }

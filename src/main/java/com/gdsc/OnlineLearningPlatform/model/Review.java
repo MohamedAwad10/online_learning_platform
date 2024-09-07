@@ -29,9 +29,8 @@ public class Review {
     @CreationTimestamp
     private LocalDate createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
-    @JsonIgnore
     private Student student;
 
     @ManyToOne

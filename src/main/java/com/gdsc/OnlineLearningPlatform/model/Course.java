@@ -58,6 +58,7 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private CourseCategory category;
 
 }

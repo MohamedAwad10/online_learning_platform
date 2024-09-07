@@ -194,6 +194,7 @@ public class AdminService {
         if(users.isEmpty()){
             return ResponseEntity.ok().body("There are no users.");
         }
+
         return ResponseEntity.ok().body(users);
     }
 

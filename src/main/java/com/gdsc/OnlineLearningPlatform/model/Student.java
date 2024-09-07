@@ -1,5 +1,6 @@
 package com.gdsc.OnlineLearningPlatform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,11 +21,14 @@ public class Student extends User{
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
+    @JsonIgnore
     private Set<Course> courses;
 
     @OneToMany(mappedBy = "student")
+    @JsonIgnore
     private Set<Enrollment> enrollments;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Review> reviews;
 }
