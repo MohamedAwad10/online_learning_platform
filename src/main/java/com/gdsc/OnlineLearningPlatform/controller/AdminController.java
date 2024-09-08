@@ -1,6 +1,7 @@
 package com.gdsc.OnlineLearningPlatform.controller;
 
 import com.gdsc.OnlineLearningPlatform.dto.AdminDto;
+import com.gdsc.OnlineLearningPlatform.dto.CourseSubmissionDto;
 import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.model.CourseSubmission;
 import com.gdsc.OnlineLearningPlatform.model.User;
@@ -32,7 +33,7 @@ public class AdminController {
     }
 
     @GetMapping("/submissions")
-    public ResponseEntity<List<CourseSubmission>> getAllSubmissions(){
+    public ResponseEntity<List<CourseSubmissionDto>> getAllSubmissions(){
         return adminService.getAllSubmissions();
     }
 
@@ -41,7 +42,7 @@ public class AdminController {
         return adminService.getAllCourses();
     }
 
-    @GetMapping("/course/{courseId}")
+    @GetMapping("/get-course/{courseId}")
     public ResponseEntity<?> getCourseById(@PathVariable Long courseId){
         return adminService.getCourseById(courseId);
     }

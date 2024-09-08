@@ -1,7 +1,13 @@
 package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.AdminDto;
+import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
+import com.gdsc.OnlineLearningPlatform.dto.CourseSubmissionDto;
+import com.gdsc.OnlineLearningPlatform.dto.UserDto;
 import com.gdsc.OnlineLearningPlatform.enums.CourseStatus;
+import com.gdsc.OnlineLearningPlatform.mapper.CourseMapper;
+import com.gdsc.OnlineLearningPlatform.mapper.CourseSubmissionMapper;
+import com.gdsc.OnlineLearningPlatform.mapper.UserMapper;
 import com.gdsc.OnlineLearningPlatform.model.*;
 import com.gdsc.OnlineLearningPlatform.repository.*;
 import org.springframework.http.HttpStatus;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -23,12 +30,23 @@ public class AdminService {
 
     private final CourseRepository courseRepository;
 
+    private final UserMapper userMapper;
+
+    private final CourseMapper courseMapper;
+
+    private final CourseSubmissionMapper courseSubmissionMapper;
+
     public AdminService(UserRepository userRepository, RoleRepository roleRepository
-                        , CourseSubmissionRepository courseSubmissionRepository, CourseRepository courseRepository) {
+                        , CourseSubmissionRepository courseSubmissionRepository
+                        , CourseRepository courseRepository, UserMapper userMapper
+                        , CourseMapper courseMapper, CourseSubmissionMapper courseSubmissionMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.courseSubmissionRepository = courseSubmissionRepository;
         this.courseRepository = courseRepository;
+        this.userMapper = userMapper;
+        this.courseMapper = courseMapper;
+        this.courseSubmissionMapper = courseSubmissionMapper;
     }
 
     public ResponseEntity<String> addRoleToUser(Long userId, AdminDto adminDto) {
@@ -118,7 +136,6 @@ public class AdminService {
 
         courseSubmissionRepository.save(courseSubmission);
 
-//        courseRepository.save(course);
         return ResponseEntity.ok("Course submission approved and course created successfully");
     }
 
@@ -146,8 +163,14 @@ public class AdminService {
         return ResponseEntity.ok("Course submission rejected");
     }
 
-    public ResponseEntity<List<CourseSubmission>> getAllSubmissions() {
-        return ResponseEntity.ok().body(courseSubmissionRepository.findAll());
+    public ResponseEntity<List<CourseSubmissionDto>> getAllSubmissions() {
+        List<CourseSubmission> courseSubmissions = courseSubmissionRepository.findAll();
+        List<CourseSubmissionDto> allCourseSubmissions =
+                courseSubmissions.stream()
+                        .map(courseSubmissionMapper::toCourseSubmissionDto)
+                        .toList();
+
+        return ResponseEntity.ok().body(allCourseSubmissions);
     }
 
     public ResponseEntity<?> getAllCourses() {
@@ -155,7 +178,11 @@ public class AdminService {
         if(courses.isEmpty()){
             return ResponseEntity.ok().body("There are no courses");
         }
-        return ResponseEntity.ok().body(courses);
+
+        List<CourseDto> allCourses = courses.stream()
+                .map(courseMapper::toCourseDto).toList();
+
+        return ResponseEntity.ok().body(allCourses);
     }
 
     public ResponseEntity<?> getCourseById(Long courseId) {
@@ -165,7 +192,7 @@ public class AdminService {
         }
         Course course = optionalCourse.get();
 
-        return ResponseEntity.ok(course);
+        return ResponseEntity.ok(courseMapper.toCourseDto(course));
     }
 
     public ResponseEntity<?> getCourseByTitle(String title) {
@@ -175,7 +202,7 @@ public class AdminService {
         }
         Course course = optionalCourse.get();
 
-        return ResponseEntity.ok(course);
+        return ResponseEntity.ok(courseMapper.toCourseDto(course));
     }
 
     public ResponseEntity<String> deleteCourseById(Long courseId) {
@@ -195,7 +222,9 @@ public class AdminService {
             return ResponseEntity.ok().body("There are no users.");
         }
 
-        return ResponseEntity.ok().body(users);
+        List<UserDto> allUsers = users.stream().map(userMapper::toUserDto).toList();
+
+        return ResponseEntity.ok().body(allUsers);
     }
 
     public ResponseEntity<?> getUserById(Long userId) {
@@ -205,7 +234,7 @@ public class AdminService {
         }
         User user = optionalUser.get();
 
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(userMapper.toUserDto(user));
     }
 
     public ResponseEntity<String> deleteUserById(Long userId) {
