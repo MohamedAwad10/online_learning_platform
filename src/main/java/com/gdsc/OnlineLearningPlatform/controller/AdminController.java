@@ -2,9 +2,6 @@ package com.gdsc.OnlineLearningPlatform.controller;
 
 import com.gdsc.OnlineLearningPlatform.dto.AdminDto;
 import com.gdsc.OnlineLearningPlatform.dto.CourseSubmissionDto;
-import com.gdsc.OnlineLearningPlatform.model.Course;
-import com.gdsc.OnlineLearningPlatform.model.CourseSubmission;
-import com.gdsc.OnlineLearningPlatform.model.User;
 import com.gdsc.OnlineLearningPlatform.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
