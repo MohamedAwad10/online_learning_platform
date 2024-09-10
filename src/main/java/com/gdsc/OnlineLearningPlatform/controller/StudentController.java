@@ -20,7 +20,7 @@ public class StudentController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Course>> browseCourses(){
+    public ResponseEntity<?> browseCourses(){
         return studentService.browseCourses();
     }
 

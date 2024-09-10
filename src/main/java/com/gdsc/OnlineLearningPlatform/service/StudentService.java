@@ -1,6 +1,8 @@
 package com.gdsc.OnlineLearningPlatform.service;
 
+import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
 import com.gdsc.OnlineLearningPlatform.dto.ReviewDto;
+import com.gdsc.OnlineLearningPlatform.mapper.CourseMapper;
 import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.model.Enrollment;
 import com.gdsc.OnlineLearningPlatform.model.Review;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -28,17 +31,27 @@ public class StudentService {
 
     private final ReviewRepository reviewRepository;
 
+    private CourseMapper courseMapper;
+
     public StudentService(CourseRepository courseRepository, StudentRepository studentRepository
-            , EnrollmentRepository enrollmentRepository, ReviewRepository reviewRepository) {
+            , EnrollmentRepository enrollmentRepository, ReviewRepository reviewRepository
+            , CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.reviewRepository = reviewRepository;
+        this.courseMapper = courseMapper;
     }
 
-    public ResponseEntity<List<Course>> browseCourses(){
+    public ResponseEntity<?> browseCourses(){
         List<Course> courses = courseRepository.findAll();
-        return ResponseEntity.ok().body(courses);
+        if(courses.isEmpty()){
+            return ResponseEntity.ok().body("There are no Courses");
+        }
+
+        List<CourseDto> allCourses = courses.stream().map(course -> courseMapper.toCourseDto(course)).toList();
+
+        return ResponseEntity.ok().body(allCourses);
     }
 
     public ResponseEntity<?> getMyCourses(Long studId) {
@@ -49,7 +62,10 @@ public class StudentService {
 
         Student student = optionalStudent.get();
         Set<Course> studentCourses =  student.getCourses();
-        return ResponseEntity.ok(studentCourses);
+
+        Set<CourseDto> allStudentCourses = studentCourses.stream().map(course -> courseMapper.toCourseDto(course)).collect(Collectors.toSet());
+
+        return ResponseEntity.ok(allStudentCourses);
     }
 
     public ResponseEntity<?> getCourse(Long courseId) {
@@ -59,7 +75,8 @@ public class StudentService {
         }
 
         Course course = optionalCourse.get();
-        return ResponseEntity.ok().body(course);
+
+        return ResponseEntity.ok().body(courseMapper.toCourseDto(course));
     }
 
     public ResponseEntity<String> enrollInCourse(Long studId, Long courseId) {
