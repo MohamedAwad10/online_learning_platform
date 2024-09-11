@@ -32,12 +32,12 @@ public class InstructorController {
     }
 
     @PostMapping("/{instructorId}/course")
-    public ResponseEntity<?> createCourse(@PathVariable Long instructorId, @RequestBody CourseDto courseDto){
+    public ResponseEntity<String> createCourse(@PathVariable Long instructorId, @RequestBody CourseDto courseDto){
         return instructorService.submitCourseForApproval(instructorId, courseDto);
     }
 
     @PutMapping("/{instructorId}/course/{courseId}")
-    public ResponseEntity<?> updateCourse(@PathVariable Long instructorId, @PathVariable Long courseId
+    public ResponseEntity<String> updateCourse(@PathVariable Long instructorId, @PathVariable Long courseId
             , @Valid @RequestBody CourseDto courseDto){
         return instructorService.updateCourse(instructorId, courseId, courseDto);
     }
