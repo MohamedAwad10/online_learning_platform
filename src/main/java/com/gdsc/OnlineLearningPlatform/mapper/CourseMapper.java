@@ -11,8 +11,11 @@ import java.util.stream.Collectors;
 @Component
 public class CourseMapper {
 
-    @Autowired
     private ReviewMapper reviewMapper;
+
+    public CourseMapper(ReviewMapper reviewMapper){
+        this.reviewMapper = reviewMapper;
+    }
 
     public CourseDto toCourseDto(Course course){
 
