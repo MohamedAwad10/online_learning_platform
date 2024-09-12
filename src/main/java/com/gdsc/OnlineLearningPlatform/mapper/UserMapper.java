@@ -14,11 +14,6 @@ public class UserMapper {
 
     public UserDto toUserDto(User user){
 
-//        Set<String> roles = user.getRoles().stream()
-//                .map(Role::getName)
-//                .map(String::toUpperCase)
-//                .collect(Collectors.toSet());
-
         return UserDto.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

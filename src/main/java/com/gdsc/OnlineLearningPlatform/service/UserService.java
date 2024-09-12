@@ -2,6 +2,7 @@ package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.UserLoginDto;
 import com.gdsc.OnlineLearningPlatform.dto.UserRegistrationDto;
+import com.gdsc.OnlineLearningPlatform.mapper.UserMapper;
 import com.gdsc.OnlineLearningPlatform.model.Instructor;
 import com.gdsc.OnlineLearningPlatform.model.Role;
 import com.gdsc.OnlineLearningPlatform.model.Student;
@@ -27,17 +28,22 @@ public class UserService {
 
     private RoleRepository roleRepository;
 
+    private UserMapper userMapper;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.userMapper = userMapper;
     }
 
-    public ResponseEntity<String> registerUser(UserRegistrationDto userRegistration){
+    public ResponseEntity<?> registerUser(UserRegistrationDto userRegistration){
 
-        if(userRepository.findByEmail(userRegistration.getEmail()).isPresent()){
+        Optional<User> optionalUser = userRepository.findByEmail(userRegistration.getEmail());
+
+        if(optionalUser.isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
         }
 
@@ -63,6 +69,7 @@ public class UserService {
         } else {
             user = new User();
         }
+
         user.setFirstName(userRegistration.getFirstName());
         user.setLastName(userRegistration.getLastName());
         user.setEmail(userRegistration.getEmail());
@@ -73,7 +80,9 @@ public class UserService {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok("Successful register");
+
+
+        return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
     public ResponseEntity<String> loginUser(UserLoginDto userLoginDto){
