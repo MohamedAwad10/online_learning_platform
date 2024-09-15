@@ -137,4 +137,10 @@ public class StudentService {
         reviewRepository.save(review);
         return ResponseEntity.ok("Review submitted successfully");
     }
+
+    public ResponseEntity<List<CourseDto>> searchCourses(String keyword) {
+        List<Course> courses = studentRepository.searchCourses(keyword);
+        List<CourseDto> allCourses = courses.stream().map(courseMapper::toCourseDto).toList();
+        return ResponseEntity.ok(allCourses);
+    }
 }

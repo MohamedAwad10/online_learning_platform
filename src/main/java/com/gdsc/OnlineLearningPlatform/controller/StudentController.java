@@ -1,5 +1,6 @@
 package com.gdsc.OnlineLearningPlatform.controller;
 
+import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
 import com.gdsc.OnlineLearningPlatform.dto.ReviewDto;
 import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.service.StudentService;
@@ -45,5 +46,10 @@ public class StudentController {
 
         return studentService.leaveReview(studId, courseId, reviewDto);
 
+    }
+
+    @GetMapping("/courses/search")
+    public ResponseEntity<List<CourseDto>> searchCourses(@RequestParam String keyword){
+        return studentService.searchCourses(keyword);
     }
 }
