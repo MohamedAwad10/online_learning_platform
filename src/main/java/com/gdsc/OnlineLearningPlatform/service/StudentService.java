@@ -1,12 +1,11 @@
 package com.gdsc.OnlineLearningPlatform.service;
 
 import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
+import com.gdsc.OnlineLearningPlatform.dto.InstructorDto;
 import com.gdsc.OnlineLearningPlatform.dto.ReviewDto;
 import com.gdsc.OnlineLearningPlatform.mapper.CourseMapper;
-import com.gdsc.OnlineLearningPlatform.model.Course;
-import com.gdsc.OnlineLearningPlatform.model.Enrollment;
-import com.gdsc.OnlineLearningPlatform.model.Review;
-import com.gdsc.OnlineLearningPlatform.model.Student;
+import com.gdsc.OnlineLearningPlatform.mapper.InstructorMapper;
+import com.gdsc.OnlineLearningPlatform.model.*;
 import com.gdsc.OnlineLearningPlatform.repository.CourseRepository;
 import com.gdsc.OnlineLearningPlatform.repository.EnrollmentRepository;
 import com.gdsc.OnlineLearningPlatform.repository.ReviewRepository;
@@ -33,14 +32,17 @@ public class StudentService {
 
     private CourseMapper courseMapper;
 
+    private InstructorMapper instructorMapper;
+
     public StudentService(CourseRepository courseRepository, StudentRepository studentRepository
             , EnrollmentRepository enrollmentRepository, ReviewRepository reviewRepository
-            , CourseMapper courseMapper) {
+            , CourseMapper courseMapper, InstructorMapper instructorMapper) {
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.reviewRepository = reviewRepository;
         this.courseMapper = courseMapper;
+        this.instructorMapper = instructorMapper;
     }
 
     public ResponseEntity<?> browseCourses(){
@@ -142,5 +144,12 @@ public class StudentService {
         List<Course> courses = studentRepository.searchCourses(keyword);
         List<CourseDto> allCourses = courses.stream().map(courseMapper::toCourseDto).toList();
         return ResponseEntity.ok(allCourses);
+    }
+
+    public ResponseEntity<List<InstructorDto>> searchInstructor(String keyword) {
+
+        List<Instructor> instructors = studentRepository.searchInstructor(keyword);
+        List<InstructorDto> allInstructors = instructors.stream().map(instructorMapper::toInstructorDto).toList();
+        return ResponseEntity.ok(allInstructors);
     }
 }

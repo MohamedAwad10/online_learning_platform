@@ -1,8 +1,8 @@
 package com.gdsc.OnlineLearningPlatform.controller;
 
 import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
+import com.gdsc.OnlineLearningPlatform.dto.InstructorDto;
 import com.gdsc.OnlineLearningPlatform.dto.ReviewDto;
-import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +51,10 @@ public class StudentController {
     @GetMapping("/courses/search")
     public ResponseEntity<List<CourseDto>> searchCourses(@RequestParam String keyword){
         return studentService.searchCourses(keyword);
+    }
+
+    @GetMapping("/instructors/search")
+    public ResponseEntity<List<InstructorDto>> searchInstructor(@RequestParam String keyword){
+        return studentService.searchInstructor(keyword);
     }
 }
