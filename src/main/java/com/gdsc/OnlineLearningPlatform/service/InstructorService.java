@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -204,5 +205,17 @@ public class InstructorService {
         Course course = optionalCourse.get();
         courseRepository.delete(course);
         return ResponseEntity.ok().body("Course deleted successfully");
+    }
+
+    public ResponseEntity<?> searchInstructorCourses(long instructorId, String keyword) {
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        if(optionalInstructor.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
+        }
+        Set<Course> courses = instructorRepository.searchInstructorCourses(instructorId, keyword);
+        Set<CourseDto> allCourses = courses.stream()
+                .map(courseMapper::toCourseDto).collect(Collectors.toSet());
+
+        return ResponseEntity.ok(allCourses);
     }
 }

@@ -1,10 +1,14 @@
 package com.gdsc.OnlineLearningPlatform.controller;
 
 import com.gdsc.OnlineLearningPlatform.dto.CourseDto;
+import com.gdsc.OnlineLearningPlatform.model.Course;
 import com.gdsc.OnlineLearningPlatform.service.InstructorService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/online-learning/instructor")
@@ -45,5 +49,10 @@ public class InstructorController {
     @DeleteMapping("/{instructorId}/course/{courseId}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long instructorId, @PathVariable Long courseId){
         return instructorService.deleteCourse(instructorId, courseId);
+    }
+
+    @GetMapping("/{instructorId}/courses/search")
+    public ResponseEntity<?> searchInstructorCourses(@PathVariable long instructorId, @RequestParam String keyword){
+        return instructorService.searchInstructorCourses(instructorId, keyword);
     }
 }
