@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/online-learning/admin")
+@RequestMapping("/online-learning/admins")
 public class AdminController {
 
     private AdminService adminService;
@@ -39,17 +39,17 @@ public class AdminController {
         return adminService.getAllCourses();
     }
 
-    @GetMapping("/get-course/{courseId}")
+    @GetMapping("/courses/{courseId}")
     public ResponseEntity<?> getCourseById(@PathVariable Long courseId){
         return adminService.getCourseById(courseId);
     }
 
-    @GetMapping("/course/{title}")
+    @GetMapping("/courses/{title}")
     public ResponseEntity<?> getCourseByTitle(@PathVariable String title){
         return adminService.getCourseByTitle(title);
     }
 
-    @DeleteMapping("/course/{courseId}")
+    @DeleteMapping("/courses/{courseId}")
     public ResponseEntity<String> deleteCourseById(@PathVariable Long courseId){
         return adminService.deleteCourseById(courseId);
     }
@@ -69,12 +69,12 @@ public class AdminController {
         return adminService.getAllUsers();
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId){
         return adminService.getUserById(userId);
     }
 
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/users/{userId}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long userId){
         return adminService.deleteUserById(userId);
     }

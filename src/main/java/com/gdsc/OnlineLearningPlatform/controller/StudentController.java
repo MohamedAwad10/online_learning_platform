@@ -25,22 +25,22 @@ public class StudentController {
         return studentService.browseCourses();
     }
 
-    @GetMapping("/{studId}/my-courses")
+    @GetMapping("/courses/{studId}")
     public ResponseEntity<?> getMyCourses(@PathVariable Long studId){
         return studentService.getMyCourses(studId);
     }
 
-    @GetMapping("/course/{courseId}")
+    @GetMapping("/courses/{courseId}")
     public ResponseEntity<?> getCourse(@PathVariable Long courseId){
         return studentService.getCourse(courseId);
     }
 
-    @PostMapping("{studId}/enroll/{courseId}")
+    @PostMapping("enroll/{studId}/{courseId}")
     public ResponseEntity<String> enrollInCourse(@PathVariable Long studId, @PathVariable Long courseId){
         return studentService.enrollInCourse(studId, courseId);
     }
 
-    @PostMapping("/{studId}/review/{courseId}")
+    @PostMapping("/review/{studId}/{courseId}")
     public ResponseEntity<String> leaveReview(@PathVariable Long studId, @PathVariable Long courseId
             , @Valid @RequestBody ReviewDto reviewDto){
 

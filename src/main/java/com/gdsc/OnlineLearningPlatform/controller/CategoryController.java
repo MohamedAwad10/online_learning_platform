@@ -22,7 +22,7 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/{categoryId}/courses")
+    @GetMapping("/courses/{categoryId}")
     public ResponseEntity<?> getCategoryCourses(@PathVariable Long categoryId){
         return categoryService.getCategoryCourses(categoryId);
     }

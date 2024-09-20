@@ -20,38 +20,38 @@ public class InstructorController {
         this.instructorService = instructorService;
     }
 
-    @GetMapping("/{instructorId}/courses")
+    @GetMapping("/courses/{instructorId}")
     public ResponseEntity<?> myAllCourses(@PathVariable Long instructorId){
         return instructorService.myAllCourses(instructorId);
     }
 
-    @GetMapping("/{instructorId}/course/{courseId}")
+    @GetMapping("/courses/{instructorId}/{courseId}")
     public ResponseEntity<?> getCourse(@PathVariable Long instructorId, @PathVariable Long courseId){
         return instructorService.getCourse(instructorId, courseId);
     }
 
-    @GetMapping("/{instructorId}/{courseId}/enrollments")
+    @GetMapping("/enrollments/{instructorId}/{courseId}")
     public ResponseEntity<?> getAllEnrollments(@PathVariable Long instructorId, @PathVariable Long courseId){
         return instructorService.getAllEnrollments(instructorId, courseId);
     }
 
-    @PostMapping("/{instructorId}/course")
+    @PostMapping("/courses/{instructorId}")
     public ResponseEntity<String> createCourse(@PathVariable Long instructorId, @RequestBody CourseDto courseDto){
         return instructorService.submitCourseForApproval(instructorId, courseDto);
     }
 
-    @PutMapping("/{instructorId}/course/{courseId}")
+    @PutMapping("/courses/{instructorId}/{courseId}")
     public ResponseEntity<String> updateCourse(@PathVariable Long instructorId, @PathVariable Long courseId
             , @Valid @RequestBody CourseDto courseDto){
         return instructorService.updateCourse(instructorId, courseId, courseDto);
     }
 
-    @DeleteMapping("/{instructorId}/course/{courseId}")
+    @DeleteMapping("/courses/{instructorId}/{courseId}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long instructorId, @PathVariable Long courseId){
         return instructorService.deleteCourse(instructorId, courseId);
     }
 
-    @GetMapping("/{instructorId}/courses/search")
+    @GetMapping("/courses/search/{instructorId}")
     public ResponseEntity<?> searchInstructorCourses(@PathVariable long instructorId, @RequestParam String keyword){
         return instructorService.searchInstructorCourses(instructorId, keyword);
     }
